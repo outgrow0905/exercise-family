@@ -1,4 +1,4 @@
-package com.latte.cj.hwp.model.royaltystatus;
+package com.latte.cj.royalty.model.royaltystatus;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Item {
-    private String finalDisposal;
-    private String registerStatus;
+public class Body {
+    private Items items;
 }

@@ -1,4 +1,4 @@
-package com.latte.cj.hwp.model;
+package com.latte.cj.royalty.model;
 
 import java.util.ArrayList;
 import java.util.List;

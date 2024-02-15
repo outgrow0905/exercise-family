@@ -1,7 +1,7 @@
 package com.latte.cj.hwp.service;
 
-import com.latte.cj.hwp.model.RoyaltyCode;
-import com.latte.cj.hwp.model.registrationinfo.Response;
+import com.latte.cj.royalty.model.RoyaltyCode;
+import com.latte.cj.royalty.model.registrationinfo.Response;
 import java.io.File;
 import java.io.FileOutputStream;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class RoyaltyExcelProducer {
             cell.setCellValue(applicationNumber);
 
             // finalDisposal
-            com.latte.cj.hwp.model.royaltystatus.Response royaltyStatus = kiprisService.getRoyaltyStatus(
+            com.latte.cj.royalty.model.royaltystatus.Response royaltyStatus = kiprisService.getRoyaltyStatus(
                 applicationNumber);
             cell = bodyRow.createCell(4);
             cell.setCellValue(royaltyStatus.getBody().getItems().getItem().getFinalDisposal());

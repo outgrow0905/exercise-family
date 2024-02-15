@@ -1,7 +1,7 @@
 package com.latte.cj.hwp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.latte.cj.hwp.model.registrationinfo.Response;
+
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;

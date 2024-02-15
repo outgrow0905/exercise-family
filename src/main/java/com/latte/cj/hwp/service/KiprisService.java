@@ -2,7 +2,7 @@ package com.latte.cj.hwp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.latte.cj.hwp.model.registrationinfo.Response;
+import com.latte.cj.royalty.model.registrationinfo.Response;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -46,7 +46,7 @@ public class KiprisService {
 
     // 서지요약정보 - getBibliographySumryInfoSearch
     // https://plus.kipris.or.kr/portal/data/service/DBII_000000000000001/view.do?menuNo=210000&kppBCode=&kppMCode=&kppSCode=&subTab=&entYn=N&clasKeyword=#soap_ADI_0000000000002131
-    public com.latte.cj.hwp.model.royaltystatus.Response getRoyaltyStatus(String applicationNumber) {
+    public com.latte.cj.royalty.model.royaltystatus.Response getRoyaltyStatus(String applicationNumber) {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -61,7 +61,7 @@ public class KiprisService {
 
         try {
             HttpResponse<String> responseFormatXml = client.send(request, BodyHandlers.ofString());
-            return xmlMapper.readValue(responseFormatXml.body(), com.latte.cj.hwp.model.royaltystatus.Response.class);
+            return xmlMapper.readValue(responseFormatXml.body(), com.latte.cj.royalty.model.royaltystatus.Response.class);
         } catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }

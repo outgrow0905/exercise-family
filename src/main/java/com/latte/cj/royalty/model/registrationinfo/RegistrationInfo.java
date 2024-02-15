@@ -1,4 +1,4 @@
-package com.latte.cj.hwp.model.registrationinfo;
+package com.latte.cj.royalty.model.registrationinfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;

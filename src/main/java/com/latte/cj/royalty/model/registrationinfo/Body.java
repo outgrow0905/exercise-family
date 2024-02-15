@@ -1,14 +1,14 @@
-package com.latte.cj.hwp.model.registrationinfo;
+package com.latte.cj.royalty.model.registrationinfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Items {
-    private RegistrationInfo registrationInfo;
+public class Body {
+    private Items items;
 }

@@ -1,9 +1,10 @@
-package com.latte.cj.hwp.controller;
+package com.latte.cj.royalty.controller;
 
 
-import com.latte.cj.hwp.model.RoyaltyCode;
 import com.latte.cj.hwp.service.RoyaltyExcelProducer;
 import com.latte.cj.hwp.service.RoyaltyParser;
+import com.latte.cj.royalty.service.RoyaltyService;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,25 +27,30 @@ import org.springframework.web.multipart.MultipartFile;
 public class RoyaltyController {
 
     private final RoyaltyExcelProducer royaltyExcelProducer;
+    private final RoyaltyService royaltyService;
 
     @PostMapping(path = "code",
         consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
         produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
     )
-    public Resource getLoyaltyCode(
+    public Resource getRoyaltyCode(
         @RequestPart("files") MultipartFile file
     ) throws Exception {
 
-        byte[] bytes = file.getBytes();
-        Path path = Paths.get("./" + file.getOriginalFilename());
-        Files.write(path, bytes);
+        royaltyService.getRoyaltyCode(file);
 
-        HWPReader.forExtractText(file.getOriginalFilename(),
-            new RoyaltyParser(), TextExtractMethod.InsertControlTextBetweenParagraphText);
-
-        File result = royaltyExcelProducer.produce();
-
-        return new ByteArrayResource(
-            Files.readAllBytes(Paths.get(result.getAbsolutePath())));
+        // byte[] bytes = file.getBytes();
+        // Path path = Paths.get("./" + file.getOriginalFilename());
+        // Files.write(path, bytes);
+        //
+        // RoyaltyParser royaltyParser = new RoyaltyParser();
+        // HWPReader.forExtractText(file.getOriginalFilename(),
+        //     royaltyParser, TextExtractMethod.InsertControlTextBetweenParagraphText);
+        //
+        // File result = royaltyExcelProducer.produce();
+        //
+        // return new ByteArrayResource(
+        //     Files.readAllBytes(Paths.get(result.getAbsolutePath())));
+        return null;
     }
 }

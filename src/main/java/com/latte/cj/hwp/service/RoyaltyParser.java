@@ -1,11 +1,13 @@
 package com.latte.cj.hwp.service;
 
-import com.latte.cj.hwp.model.RoyaltyCode;
+import com.latte.cj.royalty.model.RoyaltyCode;
 import kr.dogfoot.hwplib.tool.textextractor.TextExtractorListener;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class RoyaltyParser implements TextExtractorListener {
+
+    private StringBuilder result = new StringBuilder();
 
     static boolean read = false;
     static boolean title = false;
@@ -16,7 +18,9 @@ public class RoyaltyParser implements TextExtractorListener {
         String[] lines = trim.split(System.lineSeparator());
 
         for (String line : lines) {
-            log.info("line: {}", lines);
+            log.info("line: {}", line);
+
+            result.append(line);
 
             String titleSearchString = line.replaceAll(" ", "");
             if (titleSearchString.contains("제품규격서")) {
@@ -33,7 +37,7 @@ public class RoyaltyParser implements TextExtractorListener {
                 read = true;
                 continue;
             }
-//
+
             if (line.contains("3. 구성, 재료")) {
                 read = false;
                 break;
@@ -57,5 +61,9 @@ public class RoyaltyParser implements TextExtractorListener {
                 }
             }
         }
+    }
+
+    public String getExtractedText() {
+        return result.toString();
     }
 }
