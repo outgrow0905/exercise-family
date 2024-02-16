@@ -1,5 +1,6 @@
 package com.latte.cj.royalty.service;
 
+import com.latte.cj.pdf.service.PdfService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,15 +26,16 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class RoyaltyService {
-	private final HwpService hwpService;
+//	private final HwpService hwpService;
+	private final PdfService pdfService;
 
 	public RoyaltyCodeExcelDto getRoyaltyCode(MultipartFile file) {
-		List<String> textLines = hwpService.extractTextLines(file);
+		List<String> textLines = pdfService.extractTextLines(file);
 
 		return RoyaltyCodeExcelDto.builder()
 			.title(extractTitle(textLines))
-			.royaltyCodes(extractRoyaltyCodes(textLines,
-				"2.3 제품에 적용된 기술", "3. 구성, 재료"))
+			.royaltyCodes(extractRoyaltyCodes(textLines, "9. 적용자료", null))
+			.laws(extractLaws(textLines, "9. 적용자료", null))
 			.build();
 	}
 
@@ -59,7 +61,7 @@ public class RoyaltyService {
 
 	public Set<String> extractRoyaltyCodes(List<String> textLines, String startSection, String endSection) {
 		boolean royaltyCodeParagraph = false;
-		Set<String> royaltyCodes = null;
+		Set<String> royaltyCodes = new HashSet<>();
 
 		for (String line : textLines) {
 			if (line.contains(startSection)) {
@@ -67,32 +69,80 @@ public class RoyaltyService {
 				continue;
 			}
 
-			if (line.contains(endSection)) {
+			if (StringUtils.isNotEmpty(endSection) && line.contains(endSection)) {
 				break;
 			}
 
+			String royaltyCode = Strings.EMPTY;
 			if (royaltyCodeParagraph) {
-				royaltyCodes = extractRoyaltyCodes(line);
-				royaltyCodes.forEach(royaltyCode -> log.info("royaltyCode: {}", royaltyCode));
+				royaltyCode = extractRoyaltyCode(line);
 			}
-		}
 
-		return royaltyCodes;
-	}
-
-	private Set<String> extractRoyaltyCodes(String line) {
-		String trimmed = line.replaceAll(" ", Strings.EMPTY);
-		String[] splits = trimmed.split("특허");
-		Set<String> royaltyCodes = new HashSet<>();
-
-		for (String split : splits) {
-			if (split.contains("제10") || split.contains("제20")) {
-				int end = split.indexOf("호");
-				String royaltyCode = split.substring(0, end + 1);
+			if (StringUtils.isNotEmpty(royaltyCode)) {
 				royaltyCodes.add(royaltyCode);
 			}
 		}
 
+		royaltyCodes.forEach(royaltyCode -> log.info("royaltyCode: {}", royaltyCode));
+
 		return royaltyCodes;
+	}
+
+	private String extractRoyaltyCode(String line) {
+		String royaltyCode = Strings.EMPTY;
+		String trimmed = line.replaceAll(" ", Strings.EMPTY);
+		String[] splits = trimmed.split("특허");
+
+		for (String split : splits) {
+			if (split.contains("제10") || split.contains("제20")) {
+				int end = split.indexOf("호");
+				royaltyCode = split.substring(0, end + 1);
+				return royaltyCode;
+			}
+		}
+
+		return royaltyCode;
+	}
+
+	private String extractLaw(String line) {
+		String law = Strings.EMPTY;
+
+		String trimmed = line.replaceAll(" ", Strings.EMPTY);
+		if (trimmed.endsWith("법")) {
+			trimmed = trimmed.replaceAll("[0-9]", Strings.EMPTY);
+			trimmed = trimmed.replaceAll("\\.", Strings.EMPTY);
+			return trimmed.substring(0, trimmed.indexOf("법") + 1);
+		}
+
+		return law;
+	}
+
+	public Set<String> extractLaws(List<String> textLines, String startSection, String endSection) {
+		boolean lawParagraph = false;
+		Set<String> laws = new HashSet<>();
+
+		for (String line : textLines) {
+			if (line.contains(startSection)) {
+				lawParagraph = true;
+				continue;
+			}
+
+			if (StringUtils.isNotEmpty(endSection) && line.contains(endSection)) {
+				break;
+			}
+
+			String law = Strings.EMPTY;
+			if (lawParagraph) {
+				law = extractLaw(line);
+			}
+
+			if (StringUtils.isNotEmpty(law)) {
+				laws.add(law);
+			}
+		}
+
+		laws.forEach(royaltyCode -> log.info("laws: {}", royaltyCode));
+
+		return laws;
 	}
 }

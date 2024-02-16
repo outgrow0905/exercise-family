@@ -34,13 +34,13 @@ public class RoyaltyController {
     public Resource getRoyaltyCode(
         @RequestPart("files") MultipartFile multipartFile
     ) throws Exception {
-
         RoyaltyCodeExcelDto royaltyCode = royaltyService.getRoyaltyCode(multipartFile);
 
         File file = royaltyExcelProducer.produce(royaltyCode);
         ByteArrayResource resource = new ByteArrayResource(
             Files.readAllBytes(Paths.get(file.getAbsolutePath())));
         file.delete();
+
         return resource;
     }
 }

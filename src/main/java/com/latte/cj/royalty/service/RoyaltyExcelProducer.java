@@ -27,28 +27,67 @@ public class RoyaltyExcelProducer {
     public File produce(RoyaltyCodeExcelDto royaltyCodeExcelDto) {
         // Workbook 객체 생성
         Workbook workbook = new HSSFWorkbook();
+        log.info("a1: {}", royaltyCodeExcelDto);
+        // Sheet1
+        Sheet sheet1 = createSheet(workbook, "특허");
 
-        // Excel Sheet1 생성
-        Sheet sheet1 = workbook.createSheet("royalty");
+        // Sheet1 Header
+        createSheet1Header(sheet1);
 
-        // Sheet1 Head write
-        Row headRow = sheet1.createRow(0);
-        sheet1.setColumnWidth(0, 5000);
+        // Sheet1 Body
+        createSheet1Body(sheet1, royaltyCodeExcelDto, List.copyOf(royaltyCodeExcelDto.getRoyaltyCodes()));
+
+        log.info("a2: {}", royaltyCodeExcelDto);
+
+        // Sheet2
+        Sheet sheet2 = createSheet(workbook, "법");
+
+        // Sheet2 Header
+        createSheet2Header(sheet2);
+
+        // Sheet2 Body
+        createSheet2Body(sheet2, royaltyCodeExcelDto, List.copyOf(royaltyCodeExcelDto.getLaws()));
+
+
+        // File 생성
+        File file = new File("./" + royaltyCodeExcelDto.getTitle() + "_" + "royalty.xls");
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            ((HSSFWorkbook) workbook).write(fileOutputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            log.debug("finally end");
+        }
+
+        return file;
+    }
+
+    private void createSheet2Body(Sheet sheet1, RoyaltyCodeExcelDto royaltyCodeExcelDto, List<String> laws) {
+        for (int i = 0; i < laws.size(); i++){
+            Row bodyRow = sheet1.createRow(i + 1);
+
+            // file name
+            Cell cell = bodyRow.createCell(0);
+            cell.setCellValue(royaltyCodeExcelDto.getTitle());
+
+            // law
+            cell = bodyRow.createCell(1);
+            cell.setCellValue(laws.get(i));
+        }
+    }
+
+    private void createSheet2Header(Sheet sheet2) {
+        Row headRow = sheet2.createRow(0);
+        sheet2.setColumnWidth(0, 5000);
         Cell headRowCell = headRow.createCell(0);
-
         headRowCell.setCellValue("fileName");
         headRowCell = headRow.createCell(1);
-        headRowCell.setCellValue("royaltyCode");
-        headRowCell = headRow.createCell(2);
-        headRowCell.setCellValue("titleOfInvention");
-        headRowCell = headRow.createCell(3);
-        headRowCell.setCellValue("applicationNumber");
-        headRowCell = headRow.createCell(4);
-        headRowCell.setCellValue("finalDisposal");
-        headRowCell = headRow.createCell(5);
-        headRowCell.setCellValue("registerStatus");
+        headRowCell.setCellValue("law");
+    }
 
-        List<String> royaltyCodes = List.copyOf(royaltyCodeExcelDto.getRoyaltyCodes());
+    private void createSheet1Body(Sheet sheet1, RoyaltyCodeExcelDto royaltyCodeExcelDto,
+        List<String> royaltyCodes) {
         for (int i = 0; i < royaltyCodes.size(); i++){
             Row bodyRow = sheet1.createRow(i + 1);
 
@@ -71,6 +110,8 @@ public class RoyaltyExcelProducer {
                 .getRegistrationRightInfo().getApplicationNumber();
             cell.setCellValue(applicationNumber);
 
+            log.info("applicationNumber: {}", applicationNumber);
+
             // finalDisposal
             com.latte.cj.royalty.model.royaltystatus.Response royaltyStatus = kiprisService.getRoyaltyStatus(
                 applicationNumber);
@@ -81,18 +122,26 @@ public class RoyaltyExcelProducer {
             cell = bodyRow.createCell(5);
             cell.setCellValue(royaltyStatus.getBody().getItems().getItem().getRegisterStatus());
         }
+    }
 
-        // File 생성
-        File file = new File("./" + royaltyCodeExcelDto.getTitle() + "_" + "royalty.xls");
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            ((HSSFWorkbook) workbook).write(fileOutputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            log.debug("finally end");
-        }
+    private void createSheet1Header(Sheet sheet1) {
+        Row headRow = sheet1.createRow(0);
+        sheet1.setColumnWidth(0, 5000);
+        Cell headRowCell = headRow.createCell(0);
+        headRowCell.setCellValue("fileName");
+        headRowCell = headRow.createCell(1);
+        headRowCell.setCellValue("royaltyCode");
+        headRowCell = headRow.createCell(2);
+        headRowCell.setCellValue("titleOfInvention");
+        headRowCell = headRow.createCell(3);
+        headRowCell.setCellValue("applicationNumber");
+        headRowCell = headRow.createCell(4);
+        headRowCell.setCellValue("finalDisposal");
+        headRowCell = headRow.createCell(5);
+        headRowCell.setCellValue("registerStatus");
+    }
 
-        return file;
+    private Sheet createSheet(Workbook workbook, String name) {
+        return workbook.createSheet(name);
     }
 }
