@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.latte.cj.hwp.service.HwpService;
 import com.latte.cj.royalty.model.RoyaltyCode;
+import com.latte.cj.royalty.model.dto.RoyaltyCodeExcelDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,15 +27,14 @@ import lombok.extern.slf4j.Slf4j;
 public class RoyaltyService {
 	private final HwpService hwpService;
 
-	public String getRoyaltyCode(MultipartFile file) {
+	public RoyaltyCodeExcelDto getRoyaltyCode(MultipartFile file) {
 		List<String> textLines = hwpService.extractTextLines(file);
 
-		String title = extractTitle(textLines);
-
-		Set<String> royaltyCodes = extractRoyaltyCodes(textLines,
-			"2.3 제품에 적용된 기술", "3. 구성, 재료");
-
-		return null;
+		return RoyaltyCodeExcelDto.builder()
+			.title(extractTitle(textLines))
+			.royaltyCodes(extractRoyaltyCodes(textLines,
+				"2.3 제품에 적용된 기술", "3. 구성, 재료"))
+			.build();
 	}
 
 	public String extractTitle(List<String> textLines) {

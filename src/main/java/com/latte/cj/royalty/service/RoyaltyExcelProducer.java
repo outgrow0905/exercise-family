@@ -1,9 +1,13 @@
-package com.latte.cj.hwp.service;
+package com.latte.cj.royalty.service;
 
+import com.latte.cj.hwp.service.KiprisService;
 import com.latte.cj.royalty.model.RoyaltyCode;
+import com.latte.cj.royalty.model.dto.RoyaltyCodeExcelDto;
 import com.latte.cj.royalty.model.registrationinfo.Response;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -20,7 +24,7 @@ public class RoyaltyExcelProducer {
     @Autowired
     private KiprisService kiprisService;
 
-    public File produce() {
+    public File produce(RoyaltyCodeExcelDto royaltyCodeExcelDto) {
         // Workbook 객체 생성
         Workbook workbook = new HSSFWorkbook();
 
@@ -44,20 +48,20 @@ public class RoyaltyExcelProducer {
         headRowCell = headRow.createCell(5);
         headRowCell.setCellValue("registerStatus");
 
-        for (int i = 0 ; i < RoyaltyCode.getRoyaltyCodes().size() ; i++){
-            Row bodyRow = sheet1.createRow(i+1);
+        List<String> royaltyCodes = List.copyOf(royaltyCodeExcelDto.getRoyaltyCodes());
+        for (int i = 0; i < royaltyCodes.size(); i++){
+            Row bodyRow = sheet1.createRow(i + 1);
 
             // file name
             Cell cell = bodyRow.createCell(0);
-            cell.setCellValue(RoyaltyCode.getFileName());
+            cell.setCellValue(royaltyCodeExcelDto.getTitle());
 
             // royalty code
             cell = bodyRow.createCell(1);
-            cell.setCellValue(RoyaltyCode.getRoyaltyCodes().get(i));
+            cell.setCellValue(royaltyCodes.get(i));
 
             // registration info
-            Response registrationInfo = kiprisService.getRegistrationInfo(
-                RoyaltyCode.getRoyaltyCodes().get(i));
+            Response registrationInfo = kiprisService.getRegistrationInfo(royaltyCodes.get(i));
             cell = bodyRow.createCell(2);
             cell.setCellValue(registrationInfo.getBody().getItems().getRegistrationInfo().getRegistrationRightInfo().getTitleOfInvention());
 
@@ -79,7 +83,7 @@ public class RoyaltyExcelProducer {
         }
 
         // File 생성
-        File file = new File("./" + RoyaltyCode.getFileName() + "_" + "royalty.xls");
+        File file = new File("./" + royaltyCodeExcelDto.getTitle() + "_" + "royalty.xls");
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ((HSSFWorkbook) workbook).write(fileOutputStream);

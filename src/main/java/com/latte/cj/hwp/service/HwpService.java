@@ -25,19 +25,25 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class HwpService {
 
-	public List<String> extractTextLines(MultipartFile file) {
+	public List<String> extractTextLines(MultipartFile multipartFile) {
+		File file = null;
 		try {
-			byte[] bytes = file.getBytes();
-			Path path = Paths.get("./" + file.getOriginalFilename());
-			Files.write(path, bytes);
+			Files.write(
+				Paths.get("./" + multipartFile.getOriginalFilename())
+				, multipartFile.getBytes()
+			);
 
-			HWPFile hwpFile = HWPReader.fromFile(new File(file.getOriginalFilename()));
+			file = new File(multipartFile.getOriginalFilename());
+
+			HWPFile hwpFile = HWPReader.fromFile(file);
 			String hwpText = TextExtractor.extract(hwpFile, TextExtractMethod.InsertControlTextBetweenParagraphText);
 
 			return hwpText.lines().collect(Collectors.toList());
 		} catch (Exception e) {
 			log.error("extractText failed.");
 			throw new RuntimeException(e);
+		}finally {
+			file.delete();
 		}
 	}
 }
