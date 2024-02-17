@@ -27,7 +27,7 @@ public class RoyaltyExcelProducer {
     public File produce(RoyaltyCodeExcelDto royaltyCodeExcelDto) {
         // Workbook 객체 생성
         Workbook workbook = new HSSFWorkbook();
-        log.info("a1: {}", royaltyCodeExcelDto);
+
         // Sheet1
         Sheet sheet1 = createSheet(workbook, "특허");
 
@@ -37,8 +37,6 @@ public class RoyaltyExcelProducer {
         // Sheet1 Body
         createSheet1Body(sheet1, royaltyCodeExcelDto, List.copyOf(royaltyCodeExcelDto.getRoyaltyCodes()));
 
-        log.info("a2: {}", royaltyCodeExcelDto);
-
         // Sheet2
         Sheet sheet2 = createSheet(workbook, "법");
 
@@ -47,7 +45,6 @@ public class RoyaltyExcelProducer {
 
         // Sheet2 Body
         createSheet2Body(sheet2, royaltyCodeExcelDto, List.copyOf(royaltyCodeExcelDto.getLaws()));
-
 
         // File 생성
         File file = new File("./" + royaltyCodeExcelDto.getTitle() + "_" + "royalty.xls");
@@ -110,8 +107,6 @@ public class RoyaltyExcelProducer {
                 .getRegistrationRightInfo().getApplicationNumber();
             cell.setCellValue(applicationNumber);
 
-            log.info("applicationNumber: {}", applicationNumber);
-
             // finalDisposal
             com.latte.cj.royalty.model.royaltystatus.Response royaltyStatus = kiprisService.getRoyaltyStatus(
                 applicationNumber);
@@ -121,6 +116,21 @@ public class RoyaltyExcelProducer {
             // registerStatus
             cell = bodyRow.createCell(5);
             cell.setCellValue(royaltyStatus.getBody().getItems().getItem().getRegisterStatus());
+
+            // expirationDate
+            cell = bodyRow.createCell(6);
+            cell.setCellValue(registrationInfo.getBody().getItems().getRegistrationInfo()
+                .getRegistrationRightInfo().getExpirationDate());
+
+            // terminationCauseName
+            cell = bodyRow.createCell(7);
+            cell.setCellValue(registrationInfo.getBody().getItems().getRegistrationInfo()
+                .getRegistrationRightInfo().getTerminationCauseName());
+
+            // terminationDate
+            cell = bodyRow.createCell(8);
+            cell.setCellValue(registrationInfo.getBody().getItems().getRegistrationInfo()
+                .getRegistrationRightInfo().getTerminationDate());
         }
     }
 
@@ -139,6 +149,12 @@ public class RoyaltyExcelProducer {
         headRowCell.setCellValue("finalDisposal");
         headRowCell = headRow.createCell(5);
         headRowCell.setCellValue("registerStatus");
+        headRowCell = headRow.createCell(6);
+        headRowCell.setCellValue("expirationDate");
+        headRowCell = headRow.createCell(7);
+        headRowCell.setCellValue("terminationCauseName");
+        headRowCell = headRow.createCell(8);
+        headRowCell.setCellValue("terminationDate");
     }
 
     private Sheet createSheet(Workbook workbook, String name) {
