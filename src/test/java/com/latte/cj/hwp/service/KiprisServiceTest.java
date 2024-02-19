@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @SpringBootTest
 class KiprisServiceTest {
     @Autowired
@@ -21,7 +24,7 @@ class KiprisServiceTest {
     @Test
     void getRoyalty() throws JsonProcessingException {
         Response response = kiprisService.getRegistrationInfo("제10-2544178호");
-        System.out.println("map : " + response);
+        log.info("response: {}", response);
     }
 
     @Test

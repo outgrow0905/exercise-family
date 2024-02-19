@@ -10,9 +10,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegistrationRightInfo {
-    private String titleOfInvention;
-    private String expirationDate;
-    private String terminationCauseName;
-    private String terminationDate;
-    private String applicationNumber;
+    private String registrationNumber; //	등록번호
+    private String regReferenceNumber; //	등록참조번호
+    private String registrationDate; //	등록일자
+    private String assessmentDate; //	사정일자
+    private String expirationDate; //	존속기간만료일자
+    private String terminationCauseName; //	소멸원인명
+    private String terminationDate; //	소멸일자
+    private String applicationNumber; //	출원번호
+    private String appReferenceNumber; //	출원참조번호
+    private String applicationDate; //	출원일자
+    private String publicationNumber; //	공고번호
+    private String publicationDate; //	공고일자
+    private String internationRegistrationNumber; //	국제등록번호
+    private String internationRegistrationDate; //	국제등록일자
+    private String originalApplicationNumber; //	원출원번호
+    private String originalApplicationDate; //	원출원일자
+    private String classCode; //	분류코드
+    private String titleOfInvention;	// 발명의명칭/물품명칭/상표명칭
+    private String titleOfInventionEng;	// 발명의명칭/물품명칭/상표명칭
+    private String claimCount; //	청구항수
+    private String priorityCountry; //	우선권주장국가
+    private String priorityDate; //	우선권주장일자
+    private String priorityCount; //	우선권주장수
 }

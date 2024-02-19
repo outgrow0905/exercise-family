@@ -13,7 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegistrationInfo {
+    private RegistrationRightInfo registrationRightInfo;
+    private RegistrationRightHolderInfo registrationRightHolderInfo;
+    @JacksonXmlElementWrapper(useWrapping = false)
+    private List<RegistrationRightRankInfo> registrationRightRankInfo = new ArrayList<>();
+    @JacksonXmlElementWrapper(useWrapping = false)
+    private List<RegistrationFeeInfo> registrationFeeInfo = new ArrayList<>();
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<RegistrationLastRightHolderInfo> registrationLastRightHolderInfo = new ArrayList<>();
-    private RegistrationRightInfo registrationRightInfo;
 }
