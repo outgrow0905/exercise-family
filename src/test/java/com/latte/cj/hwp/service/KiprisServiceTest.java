@@ -3,6 +3,7 @@ package com.latte.cj.hwp.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.latte.cj.royalty.model.registrationinfo.RegistrationInfo;
 import com.latte.cj.royalty.model.registrationinfo.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,7 +18,7 @@ public class KiprisService {
     private final String KIPRIS_URL = "plus.kipris.or.kr";
     private final String KIPRIS_APIKEY = "foXVfrM3vWv2y4IfGIFakaSGB5t5CifP5ll1kzUsZ8E=";
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    // private ObjectMapper objectMapper = new ObjectMapper();
     private XmlMapper xmlMapper = new XmlMapper();
 
 

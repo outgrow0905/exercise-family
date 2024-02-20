@@ -1,6 +1,14 @@
 package com.latte.cj.royalty.model.registrationinfo;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +17,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class RegistrationRightInfo {
+    @Id
     private String registrationNumber; //	등록번호
     private String regReferenceNumber; //	등록참조번호
     private String registrationDate; //	등록일자
@@ -33,4 +43,15 @@ public class RegistrationRightInfo {
     private String priorityCountry; //	우선권주장국가
     private String priorityDate; //	우선권주장일자
     private String priorityCount; //	우선권주장수
+
+    @OneToMany(mappedBy = "registrationRightInfo", cascade = CascadeType.ALL)
+    private List<RegistrationRightHolderInfoA> registrationRightHolderInfoAs;
+    @OneToMany(mappedBy = "registrationRightInfo", cascade = CascadeType.ALL)
+    private List<RegistrationRightHolderInfoB> registrationRightHolderInfoBs;
+    @OneToMany(mappedBy = "registrationRightInfo", cascade = CascadeType.ALL)
+    private List<RegistrationRightRankInfo> registrationRightRankInfos;
+    @OneToMany(mappedBy = "registrationRightInfo", cascade = CascadeType.ALL)
+    private List<RegistrationFeeInfo> registrationFeeInfos;
+    @OneToMany(mappedBy = "registrationRightInfo", cascade = CascadeType.ALL)
+    private List<RegistrationLastRightHolderInfo> registrationLastRightHolderInfos;
 }
