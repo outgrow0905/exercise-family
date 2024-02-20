@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 public class RegistrationRightInfo {
     @Id
     private String registrationNumber; //	등록번호
+    private String title; // 한글파일 제목
     private String regReferenceNumber; //	등록참조번호
     private String registrationDate; //	등록일자
     private String assessmentDate; //	사정일자

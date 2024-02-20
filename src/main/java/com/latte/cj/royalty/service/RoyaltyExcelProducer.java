@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -19,10 +20,10 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class RoyaltyExcelProducer {
 
-    @Autowired
-    private KiprisService kiprisService;
+    private final KiprisService kiprisService;
 
     public File produce(RoyaltyCodeExcelDto royaltyCodeExcelDto) {
         // Workbook 객체 생성

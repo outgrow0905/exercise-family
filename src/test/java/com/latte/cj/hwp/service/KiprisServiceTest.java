@@ -30,6 +30,8 @@ class KiprisServiceTest {
 
     @Test
     void getRoyaltyStatus() {
-        com.latte.cj.royalty.model.royaltystatus.Response response = kiprisService.getRoyaltyStatus("1020190054708");
+        com.latte.cj.royalty.model.royaltystatus.Response response =
+            kiprisService.getRoyaltyStatus("1020190054708");
+        log.info("response: {}", response);
     }
 }

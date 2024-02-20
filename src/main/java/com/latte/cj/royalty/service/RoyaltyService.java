@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.latte.cj.hwp.service.HwpService;
+import com.latte.cj.hwp.service.KiprisService;
 import com.latte.cj.royalty.model.RoyaltyCode;
 import com.latte.cj.royalty.model.dto.RoyaltyCodeExcelDto;
+import com.latte.cj.royalty.model.registrationinfo.Response;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RoyaltyService {
 	private final HwpService hwpService;
+	private final KiprisService kiprisService;
 
 	public RoyaltyCodeExcelDto getRoyaltyCode(MultipartFile file) {
 		List<String> textLines = hwpService.extractTextLines(file);
@@ -35,6 +38,13 @@ public class RoyaltyService {
 			.royaltyCodes(extractRoyaltyCodes(textLines,
 				"2.3 제품에 적용된 기술", "3. 구성, 재료"))
 			.build();
+	}
+
+	public void saveRoyalty(RoyaltyCodeExcelDto royaltyCodeExcelDto) {
+		for (String royaltyCode : royaltyCodeExcelDto.getRoyaltyCodes()) {
+			Response registrationInfo = kiprisService.getRegistrationInfo(royaltyCode);
+
+		}
 	}
 
 	public String extractTitle(List<String> textLines) {

@@ -35,7 +35,7 @@ public class KipoService {
         try {
             HttpResponse<String> responseFormatXml = client.send(request, BodyHandlers.ofString());
             log.info("body: {}", responseFormatXml.body());
-//            return xmlMapper.readValue(responseFormatXml.body(), Response.class);
+           // return xmlMapper.readValue(responseFormatXml.body(), Response.class);
         } catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }

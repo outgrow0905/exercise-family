@@ -31,16 +31,17 @@ public class RoyaltyController {
         consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
         produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
     )
-    public Resource getRoyaltyCode(
-        @RequestPart("files") MultipartFile multipartFile
-    ) throws Exception {
+    public void getRoyaltyCode(
+        @RequestPart("files") MultipartFile multipartFile) {
 
-        RoyaltyCodeExcelDto royaltyCode = royaltyService.getRoyaltyCode(multipartFile);
+        RoyaltyCodeExcelDto royaltyCodeExcelDto = royaltyService.getRoyaltyCode(multipartFile);
 
-        File file = royaltyExcelProducer.produce(royaltyCode);
-        ByteArrayResource resource = new ByteArrayResource(
-            Files.readAllBytes(Paths.get(file.getAbsolutePath())));
-        file.delete();
-        return resource;
+        royaltyService.saveRoyalty(royaltyCodeExcelDto);
+
+        // File file = royaltyExcelProducer.produce(royaltyCode);
+        // ByteArrayResource resource = new ByteArrayResource(
+        //     Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+        // file.delete();
+        // return resource;
     }
 }
