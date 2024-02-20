@@ -11,4 +11,5 @@ import lombok.Data;
 public class RoyaltyCodeExcelDto {
 	private String title;
 	private Set<String> royaltyCodes;
+	private Set<String> laws;
 }

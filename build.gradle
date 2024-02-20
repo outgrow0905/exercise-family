@@ -48,6 +48,9 @@ dependencies {
 
     // parameter bind
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+    // pdf parse
+    implementation 'org.apache.pdfbox:pdfbox:3.0.1'
 }
 
 tasks.named('test') {

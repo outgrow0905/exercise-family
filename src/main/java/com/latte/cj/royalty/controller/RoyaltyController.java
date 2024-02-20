@@ -28,8 +28,8 @@ public class RoyaltyController {
     private final RoyaltyService royaltyService;
 
     @PostMapping(path = "code",
-        consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-        produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
+        consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+        // , produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
     )
     public void getRoyaltyCode(
         @RequestPart("files") MultipartFile multipartFile) {
