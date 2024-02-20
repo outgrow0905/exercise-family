@@ -1,6 +1,16 @@
 package com.latte.cj.royalty.service;
 
 import com.latte.cj.pdf.service.PdfService;
+import com.latte.cj.royalty.model.registrationinfo.RegistrationFeeInfo;
+import com.latte.cj.royalty.model.registrationinfo.RegistrationInfo;
+import com.latte.cj.royalty.model.registrationinfo.RegistrationLastRightHolderInfo;
+import com.latte.cj.royalty.model.registrationinfo.RegistrationRightHolderInfoA;
+import com.latte.cj.royalty.model.registrationinfo.RegistrationRightHolderInfoB;
+import com.latte.cj.royalty.model.registrationinfo.RegistrationRightInfo;
+import com.latte.cj.royalty.model.registrationinfo.RegistrationRightRankInfo;
+import com.latte.cj.royalty.model.royaltystatus.Item;
+import com.latte.cj.royalty.repository.ApplicationRepository;
+import com.latte.cj.royalty.repository.RegistrationRightInfoRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,9 +38,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class RoyaltyService {
-	private final HwpService hwpService;
+//	private final HwpService hwpService;
 	private final KiprisService kiprisService;
 	private final PdfService pdfService;
+	private final RegistrationRightInfoRepository registrationRightInfoRepository;
+	private final ApplicationRepository applicationRepository;
 
 	public RoyaltyCodeExcelDto getRoyaltyCode(MultipartFile file) {
 		List<String> textLines = pdfService.extractTextLines(file);
@@ -44,8 +56,50 @@ public class RoyaltyService {
 
 	public void saveRoyalty(RoyaltyCodeExcelDto royaltyCodeExcelDto) {
 		for (String royaltyCode : royaltyCodeExcelDto.getRoyaltyCodes()) {
-			Response registrationInfo = kiprisService.getRegistrationInfo(royaltyCode);
+			Response response = kiprisService.getRegistrationInfo(royaltyCode);
 
+			// parse
+			RegistrationInfo registrationInfo = response.getBody().getItems().getRegistrationInfo();
+			RegistrationRightInfo registrationRightInfo = registrationInfo.getRegistrationRightInfo();
+			List<RegistrationRightHolderInfoA> registrationRightHolderInfoA = registrationInfo
+				.getRegistrationRightHolderInfo()
+				.getRegistrationRightHolderInfoA();
+			List<RegistrationRightHolderInfoB> registrationRightHolderInfoB = registrationInfo.getRegistrationRightHolderInfo()
+				.getRegistrationRightHolderInfoB();
+			List<RegistrationRightRankInfo> registrationRightRankInfo = registrationInfo.getRegistrationRightRankInfo();
+			List<RegistrationFeeInfo> registrationFeeInfo = registrationInfo.getRegistrationFeeInfo();
+			List<RegistrationLastRightHolderInfo> registrationLastRightHolderInfo = registrationInfo.getRegistrationLastRightHolderInfo();
+
+			// registrationNumber set
+			registrationRightHolderInfoA.forEach(data -> data.setRegistrationNumber(registrationRightInfo.getRegistrationNumber()));
+			registrationRightHolderInfoB.forEach(data -> data.setRegistrationNumber(registrationRightInfo.getRegistrationNumber()));
+			registrationRightRankInfo.forEach(data -> data.setRegistrationNumber(registrationRightInfo.getRegistrationNumber()));
+			registrationFeeInfo.forEach(data -> data.setRegistrationNumber(registrationRightInfo.getRegistrationNumber()));
+			registrationLastRightHolderInfo.forEach(data -> data.setRegistrationNumber(registrationRightInfo.getRegistrationNumber()));
+
+			log.info("RegistrationRightInfo: {}", registrationRightInfo);
+			log.info("RegistrationRightHolderInfoA: {}", registrationRightHolderInfoA);
+			log.info("RegistrationRightHolderInfoB: {}", registrationRightHolderInfoB);
+			log.info("RegistrationRightRankInfo: {}", registrationRightRankInfo);
+			log.info("RegistrationFeeInfo: {}", registrationFeeInfo);
+			log.info("RegistrationLastRightHolderInfo: {}", registrationLastRightHolderInfo);
+
+			// for cascade
+			registrationRightInfo.setRegistrationRightHolderInfoAs(registrationRightHolderInfoA);
+			registrationRightInfo.setRegistrationRightHolderInfoBs(registrationRightHolderInfoB);
+			registrationRightInfo.setRegistrationRightRankInfos(registrationRightRankInfo);
+			registrationRightInfo.setRegistrationFeeInfos(registrationFeeInfo);
+			registrationRightInfo.setRegistrationLastRightHolderInfos(registrationLastRightHolderInfo);
+
+			// save
+			registrationRightInfoRepository.save(registrationRightInfo);
+
+			// call
+			com.latte.cj.royalty.model.royaltystatus.Response royaltyStatus = kiprisService.getRoyaltyStatus(
+				registrationRightInfo.getApplicationNumber());
+			Item item = royaltyStatus.getBody().getItems().getItem();
+			item.setApplicationNumber(item.getApplicationNumber());
+			applicationRepository.save(item);
 		}
 	}
 

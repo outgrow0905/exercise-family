@@ -35,7 +35,7 @@ class RegistrationRightInfoRepositoryTest {
 	@Transactional
 	@Rollback(value = false)
 	void save() {
-		Response response = kiprisService.getRegistrationInfo("제10-2544178호");
+		Response response = kiprisService.getRegistrationInfo("102463254");
 
 		// parse
 		RegistrationInfo registrationInfo = response.getBody().getItems().getRegistrationInfo();
@@ -74,7 +74,7 @@ class RegistrationRightInfoRepositoryTest {
 		repository.save(registrationRightInfo);
 
 		// delete
-		// repository.delete(registrationRightInfo);
+		repository.delete(registrationRightInfo);
 	}
 
 }
