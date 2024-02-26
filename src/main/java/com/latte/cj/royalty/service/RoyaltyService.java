@@ -8,26 +8,18 @@ import com.latte.cj.royalty.model.registrationinfo.RegistrationRightHolderInfoA;
 import com.latte.cj.royalty.model.registrationinfo.RegistrationRightHolderInfoB;
 import com.latte.cj.royalty.model.registrationinfo.RegistrationRightInfo;
 import com.latte.cj.royalty.model.registrationinfo.RegistrationRightRankInfo;
-import com.latte.cj.royalty.model.royaltystatus.Item;
 import com.latte.cj.royalty.repository.ApplicationRepository;
 import com.latte.cj.royalty.repository.RegistrationRightInfoRepository;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.latte.cj.hwp.service.HwpService;
-import com.latte.cj.hwp.service.KiprisService;
-import com.latte.cj.royalty.model.RoyaltyCode;
+import com.latte.cj.kipris.service.KiprisService;
 import com.latte.cj.royalty.model.dto.RoyaltyCodeExcelDto;
 import com.latte.cj.royalty.model.registrationinfo.Response;
 
@@ -54,10 +46,13 @@ public class RoyaltyService {
 			.build();
 	}
 
-	public void saveRoyalty(RoyaltyCodeExcelDto royaltyCodeExcelDto) {
-		for (String royaltyCode : royaltyCodeExcelDto.getRoyaltyCodes()) {
+	public void saveRoyalty(Set<String> royaltyCodes) {
+		int size = royaltyCodes.stream().map(kiprisService::getRegistrationNumberByRoyaltyCode)
+			.toList().size();
+		log.info("saveRoyalty size: {}", size);
+		for (String royaltyCode : royaltyCodes.stream().map(kiprisService::getRegistrationNumberByRoyaltyCode).toList()) {
 			Response response = kiprisService.getRegistrationInfo(royaltyCode);
-
+			log.info("response: {}", response);
 			// parse
 			RegistrationInfo registrationInfo = response.getBody().getItems().getRegistrationInfo();
 			RegistrationRightInfo registrationRightInfo = registrationInfo.getRegistrationRightInfo();
@@ -95,11 +90,11 @@ public class RoyaltyService {
 			registrationRightInfoRepository.save(registrationRightInfo);
 
 			// call
-			com.latte.cj.royalty.model.royaltystatus.Response royaltyStatus = kiprisService.getRoyaltyStatus(
-				registrationRightInfo.getApplicationNumber());
-			Item item = royaltyStatus.getBody().getItems().getItem();
-			item.setApplicationNumber(item.getApplicationNumber());
-			applicationRepository.save(item);
+//			com.latte.cj.royalty.model.royaltystatus.Response royaltyStatus = kiprisService.getRoyaltyStatus(
+//				registrationRightInfo.getApplicationNumber());
+//			Item item = royaltyStatus.getBody().getItems().getItem();
+//			item.setApplicationNumber(item.getApplicationNumber());
+//			applicationRepository.save(item);
 		}
 	}
 

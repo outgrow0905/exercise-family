@@ -1,9 +1,6 @@
 package com.latte.cj.royalty.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.latte.cj.hwp.service.KipoService;
-import com.latte.cj.hwp.service.KiprisService;
+import com.latte.cj.kipris.service.KiprisService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

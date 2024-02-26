@@ -4,10 +4,13 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import java.util.List;
+import java.util.Set;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,12 +39,19 @@ public class RoyaltyController {
 
         RoyaltyCodeExcelDto royaltyCodeExcelDto = royaltyService.getRoyaltyCode(multipartFile);
 
-        royaltyService.saveRoyalty(royaltyCodeExcelDto);
+        royaltyService.saveRoyalty(royaltyCodeExcelDto.getRoyaltyCodes());
 
         // File file = royaltyExcelProducer.produce(royaltyCode);
         // ByteArrayResource resource = new ByteArrayResource(
         //     Files.readAllBytes(Paths.get(file.getAbsolutePath())));
         // file.delete();
         // return resource;
+    }
+
+    @PostMapping
+    public void registerRoyaltyCode(
+        @RequestBody List<String> royaltyCodes) {
+        log.info("royaltyCodes: {}, size: {}", royaltyCodes, royaltyCodes.size());
+        royaltyService.saveRoyalty(Set.copyOf(royaltyCodes));
     }
 }

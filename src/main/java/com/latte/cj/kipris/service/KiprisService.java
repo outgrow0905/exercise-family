@@ -1,48 +1,47 @@
-package com.latte.cj.hwp.service;
+package com.latte.cj.kipris.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.latte.cj.kipris.feign.KiprisFeignClient;
+import com.latte.cj.kipris.feign.request.GetRegistrationInfoRequest;
 import com.latte.cj.royalty.model.registrationinfo.Response;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class KiprisService {
     private final String KIPRIS_URL = "plus.kipris.or.kr";
-    private final String KIPRIS_APIKEY = "foXVfrM3vWv2y4IfGIFakaSGB5t5CifP5ll1kzUsZ8E=";
+    private final String KIPRIS_APIKEY = "JjCaFVi61n4pN4BwPXo2r3RfzXlkTGDOhKqDazaHRmc==";
 
     // private ObjectMapper objectMapper = new ObjectMapper();
+    private final KiprisFeignClient feignClient;
     private XmlMapper xmlMapper = new XmlMapper();
 
 
-    public Response getRegistrationInfo(String royaltyCode) {
-        HttpClient client = HttpClient.newHttpClient();
 
-        // https://plus.kipris.or.kr/portal/data/util/DBII_000000000000015/view.do?menuNo=210004&subTab=SC001#soap_ADI_0000000000009942
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(UriComponentsBuilder.newInstance()
-                .scheme("https")
-                .host(KIPRIS_URL)
-                .path("openapi/rest/RegistrationService/registrationInfo")
-                .queryParam("accessKey", KIPRIS_APIKEY)
-                .queryParam("registrationNumber", getRegistrationNumberByRoyaltyCode(royaltyCode))
-                .build().toUri())
-            .build();
+    public Response getRegistrationInfo(String royaltyCode) {
+        String result = feignClient.getRegistrationInfo(
+            GetRegistrationInfoRequest.builder()
+                .accessKey(KIPRIS_APIKEY)
+                .registrationNumber(getRegistrationNumberByRoyaltyCode(royaltyCode))
+                .build()
+        );
 
         try {
-            HttpResponse<String> responseFormatXml = client.send(request, BodyHandlers.ofString());
-
-//            log.info("getRegistrationInfo response: {}", responseFormatXml.body());
-            return xmlMapper.readValue(responseFormatXml.body(), Response.class);
-        } catch (InterruptedException | IOException e) {
-            throw new RuntimeException(e);
+            return xmlMapper.readValue(result, Response.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("getRegistrationInfo parse fail");
         }
     }
 
@@ -76,7 +75,6 @@ public class KiprisService {
         String s1 = royaltyCode.replace("제", "");
         String s2 = s1.replace("호", "");
         String s3 = s2.replace("-", "");
-        String result = s3.concat("0000");
-        return result;
+        return StringUtils.rightPad(s3, 13, "0");
     }
 }

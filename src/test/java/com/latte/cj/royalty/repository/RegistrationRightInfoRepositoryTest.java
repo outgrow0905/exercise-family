@@ -1,7 +1,5 @@
 package com.latte.cj.royalty.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -10,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.latte.cj.hwp.service.KiprisService;
+import com.latte.cj.kipris.service.KiprisService;
 import com.latte.cj.royalty.model.registrationinfo.RegistrationFeeInfo;
 import com.latte.cj.royalty.model.registrationinfo.RegistrationInfo;
 import com.latte.cj.royalty.model.registrationinfo.RegistrationLastRightHolderInfo;

@@ -19,6 +19,7 @@ public class RegistrationFeeInfo {
 	private String registrationNumber; //	등록번호
 	@Id
 	private String registrationDate; //	등록일자
+	@Id
 	private String startAnnual; //	시작연차
 	private String lastAnnual; //	마지막연차
 	private String paymentDegree; //	납부차수

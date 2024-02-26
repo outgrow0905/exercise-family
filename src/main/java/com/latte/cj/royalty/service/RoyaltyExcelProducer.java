@@ -1,7 +1,6 @@
 package com.latte.cj.royalty.service;
 
-import com.latte.cj.hwp.service.KiprisService;
-import com.latte.cj.royalty.model.RoyaltyCode;
+import com.latte.cj.kipris.service.KiprisService;
 import com.latte.cj.royalty.model.dto.RoyaltyCodeExcelDto;
 import com.latte.cj.royalty.model.registrationinfo.Response;
 import java.io.File;
@@ -15,7 +14,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
