@@ -17,7 +17,7 @@ class ApplicationRepositoryTest {
 
     @Test
     void save() {
-        com.latte.cj.royalty.model.royaltystatus.Response response =
+        com.latte.cj.royalty.model.royaltystatussummary.Response response =
             kiprisService.getRoyaltyStatus("1020190054708");
         applicationRepository.save(response.getBody().getItems().getItem());
     }

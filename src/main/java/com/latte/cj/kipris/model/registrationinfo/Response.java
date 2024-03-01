@@ -1,4 +1,4 @@
-package com.latte.cj.royalty.model.registrationinfo;
+package com.latte.cj.kipris.model.registrationinfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

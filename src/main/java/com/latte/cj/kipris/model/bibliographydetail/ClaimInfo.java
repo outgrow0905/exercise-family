@@ -1,7 +1,6 @@
-package com.latte.cj.royalty.model.royaltystatus;
+package com.latte.cj.kipris.model.bibliographydetail;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Items {
-    private Item item;
+public class ClaimInfo {
+    private String claim; // 청구항
 }

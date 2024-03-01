@@ -1,13 +1,13 @@
 package com.latte.cj.royalty.service;
 
 import com.latte.cj.pdf.service.PdfService;
-import com.latte.cj.royalty.model.registrationinfo.RegistrationFeeInfo;
-import com.latte.cj.royalty.model.registrationinfo.RegistrationInfo;
-import com.latte.cj.royalty.model.registrationinfo.RegistrationLastRightHolderInfo;
-import com.latte.cj.royalty.model.registrationinfo.RegistrationRightHolderInfoA;
-import com.latte.cj.royalty.model.registrationinfo.RegistrationRightHolderInfoB;
-import com.latte.cj.royalty.model.registrationinfo.RegistrationRightInfo;
-import com.latte.cj.royalty.model.registrationinfo.RegistrationRightRankInfo;
+import com.latte.cj.kipris.model.registrationinfo.RegistrationFeeInfo;
+import com.latte.cj.kipris.model.registrationinfo.RegistrationInfo;
+import com.latte.cj.kipris.model.registrationinfo.RegistrationLastRightHolderInfo;
+import com.latte.cj.kipris.model.registrationinfo.RegistrationRightHolderInfoA;
+import com.latte.cj.kipris.model.registrationinfo.RegistrationRightHolderInfoB;
+import com.latte.cj.kipris.model.registrationinfo.RegistrationRightInfo;
+import com.latte.cj.kipris.model.registrationinfo.RegistrationRightRankInfo;
 import com.latte.cj.royalty.repository.ApplicationRepository;
 import com.latte.cj.royalty.repository.RegistrationRightInfoRepository;
 import java.util.HashSet;
@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.latte.cj.kipris.service.KiprisService;
 import com.latte.cj.royalty.model.dto.RoyaltyCodeExcelDto;
-import com.latte.cj.royalty.model.registrationinfo.Response;
+import com.latte.cj.kipris.model.registrationinfo.Response;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

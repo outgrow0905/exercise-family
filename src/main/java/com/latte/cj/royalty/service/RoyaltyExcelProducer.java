@@ -2,7 +2,7 @@ package com.latte.cj.royalty.service;
 
 import com.latte.cj.kipris.service.KiprisService;
 import com.latte.cj.royalty.model.dto.RoyaltyCodeExcelDto;
-import com.latte.cj.royalty.model.registrationinfo.Response;
+import com.latte.cj.kipris.model.registrationinfo.Response;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
@@ -107,7 +107,7 @@ public class RoyaltyExcelProducer {
             cell.setCellValue(applicationNumber);
 
             // finalDisposal
-            com.latte.cj.royalty.model.royaltystatus.Response royaltyStatus = kiprisService.getRoyaltyStatus(
+            com.latte.cj.royalty.model.royaltystatussummary.Response royaltyStatus = kiprisService.getRoyaltyStatus(
                 applicationNumber);
             cell = bodyRow.createCell(4);
             cell.setCellValue(royaltyStatus.getBody().getItems().getItem().getFinalDisposal());

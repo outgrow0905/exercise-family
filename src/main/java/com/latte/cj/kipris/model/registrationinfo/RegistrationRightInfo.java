@@ -1,12 +1,12 @@
-package com.latte.cj.royalty.model.registrationinfo;
+package com.latte.cj.kipris.model.registrationinfo;
 
+import jakarta.persistence.Table;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "cj_registration_right_info")
 public class RegistrationRightInfo {
     @Id
     private String registrationNumber; //	등록번호

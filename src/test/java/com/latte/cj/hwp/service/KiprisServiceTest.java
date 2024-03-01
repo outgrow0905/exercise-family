@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.latte.cj.kipris.service.KiprisService;
-import com.latte.cj.royalty.model.registrationinfo.Response;
+import com.latte.cj.kipris.model.registrationinfo.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ class KiprisServiceTest {
 
     @Test
     void getRoyaltyStatus() {
-        com.latte.cj.royalty.model.royaltystatus.Response response =
+        com.latte.cj.royalty.model.royaltystatussummary.Response response =
             kiprisService.getRoyaltyStatus("1020190054708");
         log.info("response: {}", response);
     }

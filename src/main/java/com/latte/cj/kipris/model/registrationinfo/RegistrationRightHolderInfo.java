@@ -1,4 +1,4 @@
-package com.latte.cj.royalty.model.registrationinfo;
+package com.latte.cj.kipris.model.registrationinfo;
 
 import java.util.ArrayList;
 import java.util.List;

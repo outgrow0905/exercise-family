@@ -1,4 +1,4 @@
-package com.latte.cj.royalty.model.registrationinfo;
+package com.latte.cj.royalty.model.royaltystatussummary;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Items {
-    private RegistrationInfo registrationInfo;
+public class Response {
+    private Body body;
 }

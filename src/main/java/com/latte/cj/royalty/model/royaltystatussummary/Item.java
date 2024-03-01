@@ -1,4 +1,4 @@
-package com.latte.cj.royalty.model.royaltystatus;
+package com.latte.cj.royalty.model.royaltystatussummary;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

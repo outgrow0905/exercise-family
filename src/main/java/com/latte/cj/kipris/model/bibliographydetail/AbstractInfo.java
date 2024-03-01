@@ -1,4 +1,4 @@
-package com.latte.cj.royalty.model.royaltystatus;
+package com.latte.cj.kipris.model.bibliographydetail;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Response {
-    private Body body;
+public class AbstractInfo {
+    private String astrtCont; // 초록
 }
