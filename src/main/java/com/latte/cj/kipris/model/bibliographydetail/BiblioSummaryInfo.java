@@ -2,6 +2,10 @@ package com.latte.cj.kipris.model.bibliographydetail;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +14,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "cj_app_biblio_summary_info")
+@Entity
 public class BiblioSummaryInfo {
     private String applicationDate; 		//	출원일자
+    @Id
     private String applicationNumber; 		//	출원번호
     private String claimCount; 		//	청구항수
     private String finalDisposal; 		//	최종처분내용

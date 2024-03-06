@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "application")
+// @Table(name = "application")
 public class Item {
     @Id
     private String applicationNumber; //	출원번호
