@@ -1,5 +1,13 @@
 package com.latte.cj.royalty.service;
 
+import com.latte.cj.kipris.model.bibliographydetail.AbstractInfo;
+import com.latte.cj.kipris.model.bibliographydetail.ApplicantInfo;
+import com.latte.cj.kipris.model.bibliographydetail.BiblioSummaryInfo;
+import com.latte.cj.kipris.model.bibliographydetail.ClaimInfo;
+import com.latte.cj.kipris.model.bibliographydetail.InternationalInfo;
+import com.latte.cj.kipris.model.bibliographydetail.InventorInfo;
+import com.latte.cj.kipris.model.bibliographydetail.Item;
+import com.latte.cj.kipris.model.bibliographydetail.LegalStatusInfo;
 import com.latte.cj.pdf.service.PdfService;
 import com.latte.cj.kipris.model.registrationinfo.RegistrationFeeInfo;
 import com.latte.cj.kipris.model.registrationinfo.RegistrationInfo;
@@ -9,6 +17,7 @@ import com.latte.cj.kipris.model.registrationinfo.RegistrationRightHolderInfoB;
 import com.latte.cj.kipris.model.registrationinfo.RegistrationRightInfo;
 import com.latte.cj.kipris.model.registrationinfo.RegistrationRightRankInfo;
 import com.latte.cj.royalty.repository.ApplicationRepository;
+import com.latte.cj.royalty.repository.BiblioSummaryInfoRepository;
 import com.latte.cj.royalty.repository.RegistrationRightInfoRepository;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +43,7 @@ public class RoyaltyService {
 	private final KiprisService kiprisService;
 	private final PdfService pdfService;
 	private final RegistrationRightInfoRepository registrationRightInfoRepository;
+	private final BiblioSummaryInfoRepository biblioSummaryInfoRepository;
 	private final ApplicationRepository applicationRepository;
 
 	public RoyaltyCodeExcelDto getRoyaltyCode(MultipartFile file) {
@@ -203,5 +213,42 @@ public class RoyaltyService {
 		laws.forEach(royaltyCode -> log.info("laws: {}", royaltyCode));
 
 		return laws;
+	}
+
+	public void saveBiblio(Set<String> applicationNumbers) {
+		for (String applicationNumber : applicationNumbers) {
+			com.latte.cj.kipris.model.bibliographydetail.Response response = kiprisService.getBiblio(applicationNumber);
+			Item item = response.getBody().getItem();
+
+			// parse
+			BiblioSummaryInfo biblioSummaryInfo = item.getBiblioSummaryInfoArray().getBiblioSummaryInfo();
+			biblioSummaryInfo.setApplicationNumber(biblioSummaryInfo.getApplicationNumber().replace("-", Strings.EMPTY));
+
+			List<ClaimInfo> claimInfo = item.getClaimInfoArray().getClaimInfo();
+			List<InternationalInfo> internationalInfo = item.getInternationalInfoArray().getInternationalInfo();
+			List<AbstractInfo> abstractInfo = item.getAbstractInfoArray().getAbstractInfo();
+			List<LegalStatusInfo> legalStatusInfo = item.getLegalStatusInfoArray().getLegalStatusInfo();
+			List<ApplicantInfo> applicantInfo = item.getApplicantInfoArray().getApplicantInfo();
+			List<InventorInfo> inventorInfo = item.getInventorInfoArray().getInventorInfo();
+
+			// applicationNumber set
+			claimInfo.stream().forEach(data -> data.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+			internationalInfo.stream().forEach(data -> data.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+			abstractInfo.stream().forEach(data -> data.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+			legalStatusInfo.stream().forEach(data -> data.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+			applicantInfo.stream().forEach(data -> data.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+			inventorInfo.stream().forEach(data -> data.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+
+			// for cascade
+			biblioSummaryInfo.setClaimInfo(claimInfo);
+			biblioSummaryInfo.setInternationalInfo(internationalInfo);
+			biblioSummaryInfo.setAbstractInfo(abstractInfo);
+			biblioSummaryInfo.setLegalStatusInfo(legalStatusInfo);
+			biblioSummaryInfo.setApplicantInfo(applicantInfo);
+			biblioSummaryInfo.setInventorInfo(inventorInfo);
+
+			// save
+			biblioSummaryInfoRepository.save(biblioSummaryInfo);
+		}
 	}
 }

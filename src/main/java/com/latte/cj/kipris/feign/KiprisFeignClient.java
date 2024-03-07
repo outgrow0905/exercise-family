@@ -33,5 +33,5 @@ public interface KiprisFeignClient {
         description = "출원번호(applicationNumber)로 서지정보 조회",
         url = "https://plus.kipris.or.kr/portal/data/service/DBII_000000000000001/view.do?menuNo=210000&kppBCode=&kppMCode=&kppSCode=&subTab=&entYn=N&clasKeyword=#soap_ADI_0000000000002130")
     @RequestMapping(method = RequestMethod.GET, value = "/kipo-api/kipi/patUtiModInfoSearchSevice/getBibliographyDetailInfoSearch")
-    String getRoyaltyStatus(@RequestParam("ServiceKey") String ServiceKey, @RequestParam("applicationNumber") String applicationNumber);
+    String getBiblio(@RequestParam("ServiceKey") String ServiceKey, @RequestParam("applicationNumber") String applicationNumber);
 }

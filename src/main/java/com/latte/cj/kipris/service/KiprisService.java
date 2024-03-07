@@ -44,6 +44,16 @@ public class KiprisService {
         }
     }
 
+    public com.latte.cj.kipris.model.bibliographydetail.Response getBiblio(String applicationNumber) {
+        String result = feignClient.getBiblio(KIPRIS_APIKEY, applicationNumber);
+
+        try {
+            return xmlMapper.readValue(result, com.latte.cj.kipris.model.bibliographydetail.Response.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("getBiblio parse fail");
+        }
+    }
+
     // 서지요약정보 - getBibliographySumryInfoSearch
     // https://plus.kipris.or.kr/portal/data/service/DBII_000000000000001/view.do?menuNo=210000&kppBCode=&kppMCode=&kppSCode=&subTab=&entYn=N&clasKeyword=#soap_ADI_0000000000002131
     public com.latte.cj.royalty.model.royaltystatussummary.Response getRoyaltyStatus(String applicationNumber) {

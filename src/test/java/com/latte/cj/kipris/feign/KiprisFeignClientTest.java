@@ -2,8 +2,12 @@ package com.latte.cj.kipris.feign;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.latte.cj.kipris.feign.request.GetRegistrationInfoRequest;
+import com.latte.cj.kipris.model.bibliographydetail.BiblioSummaryInfo;
+import com.latte.cj.kipris.model.bibliographydetail.BiblioSummaryInfoArray;
 import com.latte.cj.kipris.model.bibliographydetail.Item;
 import com.latte.cj.kipris.model.registrationinfo.Response;
+import com.latte.cj.royalty.repository.BiblioSummaryInfoRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,9 @@ class KiprisFeignClientTest {
 
     @Autowired
     private KiprisFeignClient client;
+
+    @Autowired
+    private BiblioSummaryInfoRepository biblioSummaryInfoRepository;
 
     @Test
     void getRegistrationInfo() throws Exception {
@@ -33,7 +40,7 @@ class KiprisFeignClientTest {
 
     @Test
     void getRoyaltyStatus() throws Exception {
-        String result = client.getRoyaltyStatus(
+        String result = client.getBiblio(
             KIPRIS_APIKEY
             , "1019900022085"
         );
@@ -43,14 +50,39 @@ class KiprisFeignClientTest {
 
         log.info("response: {}", response);
         Item item = response.getBody().getItem();
+        log.info("getBiblioSummaryInfoArray: {}", item.getBiblioSummaryInfoArray());
         log.info("getApplicantInfoArray: {}", item.getApplicantInfoArray());
         log.info("getInternationalInfoArray: {}", item.getInternationalInfoArray());
-        log.info("getFamilyInfoArray: {}", item.getFamilyInfoArray());
         log.info("getClaimInfoArray: {}", item.getClaimInfoArray());
         log.info("getIpcInfoArray: {}", item.getIpcInfoArray());
         log.info("getInventorInfoArray: {}", item.getInventorInfoArray());
-        log.info("getBiblioSummaryInfoArray: {}", item.getBiblioSummaryInfoArray());
         log.info("getAbstractInfoArray: {}", item.getAbstractInfoArray());
         log.info("getLegalStatusInfoArray: {}", item.getLegalStatusInfoArray());
+
+        BiblioSummaryInfo biblioSummaryInfo = item.getBiblioSummaryInfoArray().getBiblioSummaryInfo();
+        biblioSummaryInfo.setApplicantInfo(item.getApplicantInfoArray().getApplicantInfo());
+        biblioSummaryInfo.setInternationalInfo(item.getInternationalInfoArray().getInternationalInfo());
+        biblioSummaryInfo.setClaimInfo(item.getClaimInfoArray().getClaimInfo());
+        biblioSummaryInfo.setIpcInfo(item.getIpcInfoArray().getIpcInfo());
+        biblioSummaryInfo.setInternationalInfo(item.getInternationalInfoArray().getInternationalInfo());
+        biblioSummaryInfo.setAbstractInfo(item.getAbstractInfoArray().getAbstractInfo());
+        biblioSummaryInfo.setLegalStatusInfo(item.getLegalStatusInfoArray().getLegalStatusInfo());
+
+        item.getApplicantInfoArray().getApplicantInfo().forEach(applicantInfo
+            -> applicantInfo.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+        item.getInternationalInfoArray().getInternationalInfo().forEach(internationalInfo
+            -> internationalInfo.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+        item.getClaimInfoArray().getClaimInfo().forEach(claimInfo
+            -> claimInfo.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+        item.getIpcInfoArray().getIpcInfo().forEach(ipcInfo
+            -> ipcInfo.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+        item.getInternationalInfoArray().getInternationalInfo().forEach(internationalInfo
+            -> internationalInfo.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+        item.getAbstractInfoArray().getAbstractInfo().forEach(abstractInfo
+            -> abstractInfo.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+        item.getLegalStatusInfoArray().getLegalStatusInfo().forEach(legalStatusInfo
+            -> legalStatusInfo.setApplicationNumber(biblioSummaryInfo.getApplicationNumber()));
+
+        biblioSummaryInfoRepository.save(biblioSummaryInfo);
     }
 }

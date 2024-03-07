@@ -48,10 +48,16 @@ public class RoyaltyController {
         // return resource;
     }
 
-    @PostMapping
+    @PostMapping(path = "royalty-code")
     public void registerRoyaltyCode(
         @RequestBody List<String> royaltyCodes) {
         log.info("royaltyCodes: {}, size: {}", royaltyCodes, royaltyCodes.size());
         royaltyService.saveRoyalty(Set.copyOf(royaltyCodes));
+    }
+
+    @PostMapping(path = "biblio")
+    public void registerBiblio(
+        @RequestBody List<String> applicationNumbers) {
+        royaltyService.saveBiblio(Set.copyOf(applicationNumbers));
     }
 }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BiblioSummaryInfoArray {
-    @JacksonXmlElementWrapper(useWrapping = false)
-    private List<BiblioSummaryInfo> biblioSummaryInfo = new ArrayList<>();
+    // @JacksonXmlElementWrapper(useWrapping = false)
+    // private List<BiblioSummaryInfo> biblioSummaryInfo = new ArrayList<>();
+    private BiblioSummaryInfo biblioSummaryInfo;
 }
